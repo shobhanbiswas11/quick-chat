@@ -1,5 +1,11 @@
+import { Button } from "@nextui-org/react";
+
 function App() {
-  return <div className="text-red-600">Hello From chat app</div>;
+  return (
+    <div>
+      <Button variant="solid">Click Me</Button>
+    </div>
+  );
 }
 
 export default App;
