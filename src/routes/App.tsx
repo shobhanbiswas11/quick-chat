@@ -10,7 +10,9 @@ function App() {
 
   const createChatRoomMutation = useMutation({
     mutationFn: async () => {
-      const { data: chatRoom } = await client.models.ChatRoom.create({});
+      const { data: chatRoom } = await client.models.ChatRoom.create({
+        ttl: Math.floor(Date.now() / 1000) + 60 * 60,
+      });
       return chatRoom;
     },
     onSuccess(data) {

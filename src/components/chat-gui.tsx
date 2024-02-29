@@ -25,7 +25,7 @@ export default function ChatGui({ chats, onNewMessage }: Props) {
     <div>
       <ChatContainer
         style={{ height: "70vh" }}
-        className="rounded-lg p-4 !bg-neutral-700"
+        className="rounded-lg md:p-2 lg:p-4 !bg-neutral-700"
       >
         <MessageList className="!bg-neutral-700">
           {chats.map((chat, i) => {
