@@ -48,7 +48,7 @@ export default function ChatGui({ chats, onNewMessage }: Props) {
             if (isNormalMessage) position = "normal";
 
             const model: MessageModel = {
-              direction: "incoming",
+              direction: chat.direction,
               position,
               message: chat.content,
               sender: chat.sender,
