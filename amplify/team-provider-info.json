@@ -1,0 +1,15 @@
+{
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-quickchat-prod-101502-authRole",
+      "UnauthRoleArn": "arn:aws:iam::014669188146:role/amplify-quickchat-prod-101502-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::014669188146:role/amplify-quickchat-prod-101502-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-quickchat-prod-101502-deployment",
+      "UnauthRoleName": "amplify-quickchat-prod-101502-unauthRole",
+      "StackName": "amplify-quickchat-prod-101502",
+      "StackId": "arn:aws:cloudformation:ap-south-1:014669188146:stack/amplify-quickchat-prod-101502/7876dfb0-d786-11ee-8f0e-0291ca3eb2a9",
+      "AmplifyAppId": "d35kzk3l5cnqay"
+    }
+  }
+}
