@@ -1,5 +1,5 @@
+import ShareButton from "@/components/share-button";
 import * as api from "@/lib/api";
-import { Divider } from "@nextui-org/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -41,39 +41,35 @@ export default function ChatRoomWithUser() {
   if (!query.data) return null;
 
   return (
-    <div className="md:container md:max-w-screen-md mt-10">
-      <div className="px-2 md:px-0">
-        <p className="text-medium">
-          Share this link to add people to this chat room
-        </p>
-        <h1 className="text-lg text-blue-500 mt-2">{`${window.location.origin}/chat-room/${chatRoomId}`}</h1>
-        <Divider className="mb-10 mt-4" />
+    <div className="p-2 max-w-screen-sm mx-auto">
+      <ShareButton link={`${window.location.origin}/chat-room/${chatRoomId}`} />
+      <div className="h-[70vh]">
+        <ChatGui
+          chats={query.data
+            .sort(
+              (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime()
+            )
+            .map((c) => ({
+              content: c.message,
+              id: c.id,
+              sender: c.from || undefined,
+              direction: c.from === userId ? "outgoing" : "incoming",
+            }))}
+          onNewMessage={async (message) => {
+            if (!chatRoomId || !userId) return;
+
+            createChatMutation.mutate({
+              chatRoomId,
+              message,
+              timeStamp: Date.now(),
+              ttl: Math.floor(Date.now() / 1000) + 60 * 10,
+              from: userId,
+            });
+          }}
+        />
       </div>
-
-      <ChatGui
-        chats={query.data
-          .sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          )
-          .map((c) => ({
-            content: c.message,
-            id: c.id,
-            sender: c.from || undefined,
-            direction: c.from === userId ? "outgoing" : "incoming",
-          }))}
-        onNewMessage={async (message) => {
-          if (!chatRoomId || !userId) return;
-
-          createChatMutation.mutate({
-            chatRoomId,
-            message,
-            timeStamp: Date.now(),
-            ttl: Math.floor(Date.now() / 1000) + 60 * 10,
-            from: userId,
-          });
-        }}
-      />
     </div>
   );
 }

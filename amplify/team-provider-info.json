@@ -14,6 +14,12 @@
     "categories": {
       "api": {
         "quickchat": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d35kzk3l5cnqay",
+          "type": "manual"
+        }
       }
     }
   }

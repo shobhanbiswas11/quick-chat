@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* .cs-chat-container {
+  @apply p-1 border-1 border-neutral-100;
+} */
+
+input {
+  font-size: 18px !important;
+}
+
 .cs-message__sender-name {
   @apply !text-blue-300 text-medium;
 }
