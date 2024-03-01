@@ -10,6 +10,11 @@
       "StackName": "amplify-quickchat-prod-101502",
       "StackId": "arn:aws:cloudformation:ap-south-1:014669188146:stack/amplify-quickchat-prod-101502/7876dfb0-d786-11ee-8f0e-0291ca3eb2a9",
       "AmplifyAppId": "d35kzk3l5cnqay"
+    },
+    "categories": {
+      "api": {
+        "quickchat": {}
+      }
     }
   }
 }

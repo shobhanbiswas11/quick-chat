@@ -2,21 +2,18 @@ input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
 }
 
-type Blog @model {
+type ChatRoom @model {
   id: ID!
-  name: String!
-  posts: [Post] @hasMany
+  creator: String!
+  chats: [Chat] @hasMany(indexName: "byChatRoom", fields: ["id"])
+  ttl: AWSTimestamp! @ttl
 }
 
-type Post @model {
+type Chat @model {
   id: ID!
-  title: String!
-  blog: Blog @belongsTo
-  comments: [Comment] @hasMany
-}
-
-type Comment @model {
-  id: ID!
-  post: Post @belongsTo
-  content: String!
+  chatRoomId: ID! @index(name: "byChatRoom", sortKeyFields: ["timeStamp"])
+  message: String!
+  timeStamp: AWSTimestamp!
+  ttl: AWSTimestamp! @ttl
+  from: String
 }

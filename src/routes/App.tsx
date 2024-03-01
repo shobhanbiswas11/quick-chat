@@ -2,7 +2,7 @@ import { Button, Card, CardBody, CardHeader, Input } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { client } from "../lib/amplify-client";
+import * as api from "../lib/api";
 
 function App() {
   const navigate = useNavigate();
@@ -10,10 +10,12 @@ function App() {
 
   const createChatRoomMutation = useMutation({
     mutationFn: async () => {
-      const { data: chatRoom } = await client.models.ChatRoom.create({
-        ttl: Math.floor(Date.now() / 1000) + 60 * 60,
+      const { data, errors } = await api.createChatRoom({
+        creator: name,
+        ttl: Math.floor(Date.now() / 1000) + 60 * 10,
       });
-      return chatRoom;
+      if (errors) throw errors;
+      return data.createChatRoom;
     },
     onSuccess(data) {
       navigate(`/chat-room/${data.id}/${name}`);

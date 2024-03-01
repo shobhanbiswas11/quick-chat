@@ -7,8 +7,8 @@
     "config": {
       "SourceDir": "src",
       "DistributionDir": "dist",
-      "BuildCommand": "",
-      "StartCommand": "npm run-script start"
+      "BuildCommand": "pnpm run build",
+      "StartCommand": "pnpm run start"
     }
   },
   "providers": [

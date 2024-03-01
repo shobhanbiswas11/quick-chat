@@ -15,7 +15,7 @@ export default function ChatRoom() {
       <Card>
         <CardHeader>Enter into Chat Room</CardHeader>
         <CardBody>
-          <form className="space-y-4">
+          <div className="space-y-4">
             <Input
               name="name"
               placeholder="Enter your name"
@@ -30,7 +30,7 @@ export default function ChatRoom() {
             >
               Enter
             </Button>
-          </form>
+          </div>
         </CardBody>
       </Card>
     </div>

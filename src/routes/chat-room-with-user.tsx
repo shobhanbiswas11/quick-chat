@@ -1,6 +1,6 @@
-import { client } from "@/lib/amplify-client";
+import * as api from "@/lib/api";
 import { Divider } from "@nextui-org/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import ChatGui from "../components/chat-gui";
@@ -11,30 +11,25 @@ export default function ChatRoomWithUser() {
     userId: string;
   }>();
   const queryClient = useQueryClient();
-
   const query = useQuery({
     queryKey: ["chats", chatRoomId],
     queryFn: async () => {
-      if (!chatRoomId) return [];
-      const res = await client.models.ChatRoom.get({
-        id: chatRoomId,
-      });
-      return (await res.data.chats()).data;
+      if (!chatRoomId) throw new Error("Chat Room not found");
+      const res = await api.getChatsByChatRoom(chatRoomId);
+      return res.data.chatsByChatRoomIdAndTimeStamp.items;
     },
+  });
+  const createChatMutation = useMutation({
+    mutationFn: api.createChat,
   });
 
   useEffect(() => {
-    if (!chatRoomId || !userId) return;
+    if (!chatRoomId) return;
 
-    const subs = client.models.Chat.onCreate({
-      filter: {
-        chatRoomChatsId: {
-          eq: chatRoomId,
-        },
-      },
-    }).subscribe((next) => {
+    const subs = api.onChatCreate(chatRoomId).subscribe((next) => {
       queryClient.setQueryData(["chats", chatRoomId], (old: any[]) => {
-        return [...old, next];
+        const newChat: (typeof old)[number] = next.data.onCreateChat;
+        return [...old, newChat];
       });
     });
 
@@ -44,6 +39,7 @@ export default function ChatRoomWithUser() {
   }, [chatRoomId, queryClient]);
 
   if (!query.data) return null;
+
   return (
     <div className="md:container md:max-w-screen-md mt-10">
       <div className="px-2 md:px-0">
@@ -61,17 +57,20 @@ export default function ChatRoomWithUser() {
               new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
           )
           .map((c) => ({
-            content: c.content,
+            content: c.message,
             id: c.id,
-            sender: c.sender || undefined,
-            direction: c.sender === userId ? "outgoing" : "incoming",
+            sender: c.from || undefined,
+            direction: c.from === userId ? "outgoing" : "incoming",
           }))}
         onNewMessage={async (message) => {
-          await client.models.Chat.create({
-            content: message,
-            chatRoomChatsId: chatRoomId,
-            sender: userId,
-            ttl: Math.floor(Date.now() / 1000) + 60 * 60,
+          if (!chatRoomId || !userId) return;
+
+          createChatMutation.mutate({
+            chatRoomId,
+            message,
+            timeStamp: Date.now(),
+            ttl: Math.floor(Date.now() / 1000) + 60 * 10,
+            from: userId,
           });
         }}
       />
